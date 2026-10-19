@@ -6,8 +6,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.netflix.discovery.shared.transport.decorator.RetryableEurekaHttpClient;
-
 import rahioui.youssef.ebank_service.entities.BankAccount;
 import rahioui.youssef.ebank_service.feign.CustomerRestClient;
 import rahioui.youssef.ebank_service.repository.BankAccountRepository;
@@ -29,14 +27,14 @@ public class EBankService {
         return accounts;
     }
 
-    public BankAccount findBankAccountId(String id) {
+    public BankAccount getBankAccountById(String id) {
         BankAccount bankAccount = accountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Account not Found!"));
         bankAccount.setCustomer(customerRestClient.getCustomerById(bankAccount.getCustomerId()));
         return bankAccount;
     }
 
-    public BankAccount saveBankAccount(BankAccount bankAccount) {
+    public BankAccount save(BankAccount bankAccount) {
         try {
             customerRestClient.getCustomerById(bankAccount.getCustomerId());
         } catch (Exception e) {
